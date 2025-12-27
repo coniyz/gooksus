@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sana Olan Sevgim Kadar Gül!</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #fff0f3;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+        }
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            cursor: crosshair;
+        }
+        .rose {
+            position: absolute;
+            font-size: 40px;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s;
+        }
+        .rose:hover {
+            transform: scale(1.2);
+        }
+        #score-board {
+            position: fixed;
+            top: 20px;
+            width: 100%;
+            font-size: 24px;
+            color: #d90429;
+            font-weight: bold;
+            z-index: 10;
+        }
+        #message {
+            position: fixed;
+            bottom: 50px;
+            width: 100%;
+            font-size: 20px;
+            color: #ef233c;
+            font-style: italic;
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="score-board">Toplanan Güller: <span id="count">0</span></div>
+    <div id="message">Gülleri toplayarak sana olan mesajlarımı oku...</div>
+    <div id="game-container"></div>
+
+    <script>
+        const container = document.getElementById('game-container');
+        const countDisplay = document.getElementById('count');
+        const messageDisplay = document.getElementById('message');
+        let score = 0;
+
+        const messages = [
+            "Seninle her anım bir bahar bahçesi gibi...",
+            "Dünyadaki tüm güllerden daha güzelsin.",
+            "Kalbim her saniye senin için çarpıyor.",
+            "İyi ki hayatımdasın, canım sevgilim.",
+            "Gülüşün dünyaya güneş gibi doğuyor.",
+            "Seni her geçen gün daha çok seviyorum!",
+            "Hayatımın en güzel renkleri seninle geldi."
+        ];
+
+        function createRose() {
+            const rose = document.createElement('div');
+            rose.className = 'rose';
+            rose.innerHTML = '🌹';
+            rose.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+            rose.style.top = '-50px';
+            
+            // Düşme hızı
+            let speed = Math.random() * 2 + 2;
+            let topPos = -50;
+
+            const fall = setInterval(() => {
+                topPos += speed;
+                rose.style.top = topPos + 'px';
+
+                if (topPos > window.innerHeight) {
+                    clearInterval(fall);
+                    rose.remove();
+                }
+            }, 20);
+
+            rose.onclick = () => {
+                score++;
+                countDisplay.innerText = score;
+                messageDisplay.innerText = messages[Math.floor(Math.random() * messages.length)];
+                clearInterval(fall);
+                rose.innerHTML = '❤️'; // Tıklayınca kalbe dönüşsün
+                setTimeout(() => rose.remove(), 300);
+            };
+
+            container.appendChild(rose);
+        }
+
+        // Her 800 milisaniyede bir yeni gül düşsün
+        setInterval(createRose, 800);
+
+    </script>
+</body>
+</html>
